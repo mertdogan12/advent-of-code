@@ -27,7 +27,7 @@ int main()
 {
     // [cout of 0, cout of 1]
     std::string input;
-    std::ifstream InputFile("input.txt");
+    std::ifstream InputFile("test.txt");
     std::vector<std::array<int, 2>> vh;
     bool first = true;
 

@@ -1,10 +1,9 @@
 #include "iostream"
 #include "fstream"
-#include "vector"
-#include "array"
 #include "math.h"
+#include "vector"
 
-#define Log(x) std::cout << x << std::endl;
+#define LogVec(x) for (std::string elem: x) std::cout << elem << ' ' ; std::cout << std::endl;
 
 int binToInt(std::string inp)
 {
@@ -25,56 +24,61 @@ int binToInt(std::string inp)
     return out;
 }
 
+char mostCommonAt(const std::vector<std::string> input, int pos)
+{
+    int one = 0;
+    int zero = 0;
+
+    for (int i = 0; i < input.size(); i++)
+    {
+        if (input.at(i).at(pos) == '1')
+            one++;
+        else if (input.at(i).at(pos) == '0')
+            zero++;
+    }
+
+    return (zero > one) ? '0' : '1';
+}
+
+std::string getBits(std::vector<std::string> input, bool most)
+{
+    for (int i = 0; i < input.at(0).length(); i++)
+    {
+        std::vector<std::string> left;
+        char common = mostCommonAt(input, i);
+        if (!most)
+            common = (common == '0') ? '1' : '0';
+
+        for (int j = 0; j < input.size(); j++)
+        {
+            if (input.at(j).at(i) == common)
+                left.push_back(input.at(j));
+        }
+
+        input = left;
+
+        if (input.size() == 1)
+        {
+            return input.at(0);
+        }
+    }
+
+    return input.at(0);
+}
+
 int main()
 {
     // [cout of 0, cout of 1]
     std::string input;
     std::ifstream InputFile("input.txt");
-    std::vector<std::array<int, 2>> vh;
-    bool first = true;
+    std::vector<std::string> elements;
 
     while (getline(InputFile, input))
     {
-        for (int i = 0; i < input.length(); i++) 
-        {
-            char c = input.at(i);
-
-            if (first)
-            {
-                vh.push_back({0, 0});
-            }
-            
-            if (c == '0')
-                vh.at(i)[0]++;
-            else if (c == '1')
-                vh.at(i)[1]++;
-        }
-        
-        first = false;
+        elements.push_back(input);
     }
 
-    std::string grString;
-    std::string erString;
-
-    for(int i = 0; i < vh.size(); i++)
-    {
-        std::array<int, 2> arr = vh.at(i);
-
-        if (arr[0] > arr[1]) 
-        {
-            grString += '0';
-            erString += '1';
-        }
-        else if (arr[0] < arr[1])
-        {
-            grString += '1';
-            erString += '0';
-        }
-    }
-
-    std::cout << grString << " " << erString << std::endl;
-    std::cout << binToInt(grString) * binToInt(erString) << std::endl;
-
+    std::cout << binToInt(getBits(elements, true)) * binToInt(getBits(elements, false)) << std::endl;
 
     return 1;
 }
