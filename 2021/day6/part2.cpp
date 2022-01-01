@@ -51,9 +51,6 @@ int main()
     }
     
     unsigned long out = 0;
-    long test = 26984457539;
-    std::cout << test << std::endl;
-
     for(int i = 0; i < 9; i++)
     {
         std::cout << fisches[i] << std::endl;
