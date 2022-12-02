@@ -9,7 +9,7 @@ fn main() {
     fs::write("output.txt", result)
         .expect("Couln't write to file output.txt");
 
-    println!("Output in file output.txt");
+    println!("{output}");
 }
 
 fn run(input: String) -> String {
@@ -28,7 +28,8 @@ mod tests {
             .expect("File test-input.txt doesn't exist");
 
         let expected_output: String = fs::read_to_string("test-output.txt")
-            .expect("File test-output.txt doesn't exist");
+            .expect("File test-output.txt doesn't exist")
+            .replace("\n", "");
 
         let result = run(input);
 
