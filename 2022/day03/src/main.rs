@@ -12,19 +12,48 @@ fn main() {
     println!("{result}");
 }
 
+const ALPHABET: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 fn run(input: String) -> String {
     let mut out: u32 = 0;
+    let mut pos: u8 = 0;
+    let mut tmp: Vec<char> = Vec::new();
 
     for line in input.lines() {
-        let (fist_half, second_half) = line.split_at(line.len() / 2);
+        match pos {
+            0 => {
+                for c in line.chars() {
+                    if !tmp.contains(&c) {
+                        tmp.push(c);
+                    }
+                }
+            },
+            1 | 2 => {
+                let mut tmp_tmp: Vec<char> = Vec::new();
 
-        assert!(fist_half.len() == second_half.len());
+                while !tmp.is_empty() {
+                    let c: char = tmp.pop()
+                        .expect("Error while poping tmp");
 
-        for c in fist_half.chars() {
-            if second_half.contains(c) {
-                out += get_priority(c);
-                break;
-            }
+                    if line.contains(c) {
+                        tmp_tmp.push(c);
+                    }
+                }
+
+                tmp = tmp_tmp;
+            },
+            _ => panic!("Position {pos} is not allowed"),
+        }
+
+        pos += 1;
+
+        if pos == 3 {
+            assert!(tmp.len() == 1);
+            out += get_priority(tmp.pop()
+                .expect("Error while poping an element out of tmp"));
+
+            tmp.clear();
+            pos = 0;
         }
     }
 
@@ -32,10 +61,8 @@ fn run(input: String) -> String {
 }
 
 fn get_priority(c: char) -> u32 {
-    let alphabet: String = String::from("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-    let out: usize = alphabet.find(c)
-        .unwrap_or_else(|| panic!("Couln not find {c} in {alphabet}"));
+    let out: usize = ALPHABET.find(c)
+        .unwrap_or_else(|| panic!("Couln not find {c} in {ALPHABET}"));
 
     (out + 1) as u32
 }
