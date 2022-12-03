@@ -6,10 +6,10 @@ fn main() {
 
     let result = run(input);
 
-    fs::write("output.txt", result)
+    fs::write("output.txt", &result)
         .expect("Couln't write to file output.txt");
 
-    println!("{output}");
+    println!("{result}");
 }
 
 fn run(input: String) -> String {
