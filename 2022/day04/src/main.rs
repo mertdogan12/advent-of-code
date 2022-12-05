@@ -23,7 +23,7 @@ fn run(input: String) -> String {
         let sec1: Section = string_to_section(sections[0]);
         let sec2: Section = string_to_section(sections[1]);
 
-        if contain_the_other(sec1, sec2) {
+        if overlaps(&sec1, &sec2) || overlaps(&sec2, &sec1) {
             out += 1;
         }
     }
@@ -31,9 +31,9 @@ fn run(input: String) -> String {
     out.to_string()
 }
 
-fn contain_the_other(sec1: Section, sec2: Section) -> bool {
-    (sec1.0 >= sec2.0 && sec1.1 <= sec2.1) ||
-        (sec2.0 >= sec1.0 && sec2.1 <= sec1.1)
+fn overlaps(sec1: &Section, sec2: &Section) -> bool {
+    (sec2.1 >= sec1.0 && sec2.1 <= sec1.1) ||
+        (sec2.0 >= sec1.0 && sec2.0 <= sec1.1)
 }
 
 fn string_to_section(inp: &str) -> Section {
