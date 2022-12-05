@@ -86,9 +86,15 @@ fn run(input: String) -> String {
     }
 
     for action in actions.iter() {
+        let mut tmp: Vec<char> = Vec::new();
+
         for _ in 0..action.count {
             let f: char = stacks[action.from].pop().unwrap();
-            stacks[action.to].push(f);
+            tmp.push(f);
+        }
+
+        for t in tmp.iter().rev() {
+            stacks[action.to].push(*t);
         }
     }
 
