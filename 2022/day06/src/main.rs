@@ -21,15 +21,15 @@ fn run(input: String) -> String {
 
         last_four.push_back(b);
 
-        if last_four.len() < 4 {
+        if last_four.len() < 14 {
             continue;
         }
 
-        if last_four.len() > 4 {
+        if last_four.len() > 14 {
            last_four.pop_front(); 
         }
 
-        assert!(last_four.len() == 4);
+        assert!(last_four.len() == 14);
 
         if check(&last_four) {
             return (i + 1).to_string();
