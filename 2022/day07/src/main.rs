@@ -44,7 +44,11 @@ fn run(input: String) -> String {
         }
     }
 
-    filesystem.get_size().to_string()
+    let size = filesystem.get_size();
+
+    let free_size = 30000000 - (70000000 - size);
+    
+    filesystem.free_size(free_size).to_string()
 }
 
 #[cfg(test)]

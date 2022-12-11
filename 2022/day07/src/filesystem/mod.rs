@@ -8,14 +8,13 @@ enum FileType {
 struct File {
     file_type: FileType,
     children: HashMap<String, File>,
-    size: i32,
-    name: String,
+    size: i32
 }
 
 pub struct FileSystem {
     root: File,
     path: Vec<String>,
-    size: RefCell<u32>
+    dirs: RefCell<Vec<u32>>
 }
 
 impl FileSystem {
@@ -25,10 +24,9 @@ impl FileSystem {
                     file_type: FileType::Directory,
                     children: HashMap::new(),
                     size: -1,
-                    name: String::from("/")
             },
             path: Vec::new(),
-            size: RefCell::new(0)
+            dirs: RefCell::new(Vec::new())
         }
     }
 
@@ -46,8 +44,7 @@ impl FileSystem {
         self.get_file().children.insert(name.to_string(), File {
             file_type: FileType::Directory,
             children: HashMap::new(),
-            size: -1,
-            name: name.to_string()
+            size: -1
         });
     }
 
@@ -55,14 +52,24 @@ impl FileSystem {
         self.get_file().children.insert(name.to_string(), File {
             file_type: FileType::File,
             children: HashMap::new(),
-            size,
-            name: name.to_string()
+            size
         });
     }
 
     pub fn get_size(&self) -> u32 {
-        self.calc_size(&self.root);
-        *self.size.borrow()
+        self.calc_size(&self.root)
+    }
+    
+    pub fn free_size(&self, size: u32) -> u32 {
+        let mut out: u32 = 70000000;
+
+        for dir in self.dirs.borrow().iter() {
+            if *dir > size && *dir < out {
+                out = *dir;
+            }
+        }
+
+        out
     }
 
     fn calc_size(&self, file: &File) -> u32 {
@@ -77,11 +84,7 @@ impl FileSystem {
             }
         }
 
-        if out < 100000 {
-            let s = *self.size.borrow();
-
-            self.size.replace(s + out);
-        }
+        self.dirs.borrow_mut().push(out);
 
         out
     }
