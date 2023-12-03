@@ -3,7 +3,7 @@ use std::fs;
 fn main() {
     let input = fs::read_to_string("./input.txt").expect("Could not read input.txt");
 
-    let output = part1(&input);
+    let output = part2(&input);
     println!("{output}")
 }
 
@@ -59,6 +59,38 @@ fn part1(input: &str) -> String {
     return out.to_string();
 }
 
+fn part2(input: &str) -> String {
+    let mut out = 0;
+
+    for line in input.lines() {
+        let inp = line.split(": ");
+        let mut cubes = [-1, -1, -1]; // red, green, blue
+
+        for data in inp.clone().nth(1).unwrap().split("; ") {
+            for cube in data.split(", ") {
+                let amount = cube.split(' ').next().unwrap().parse::<i32>().unwrap();
+                let color = cube.split(' ').last().unwrap();
+
+                let index = match color {
+                    "red" => 0,
+                    "green" => 1,
+                    "blue" => 2,
+                    _ => panic!("{color} is not a valid color"),
+                };
+
+                if amount > cubes[index] {
+                    cubes[index] = amount;
+                }
+            }
+
+        }
+
+        out += cubes[0] * cubes[1] * cubes[2];
+    }
+
+    return out.to_string();
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -68,10 +100,22 @@ mod tests {
     fn part1_test() {
         let input = fs::read_to_string("./test.txt").expect("Could not read input.txt");
         let result = fs::read_to_string("./result.txt")
-            .expect("Could not read input.txt")
+            .expect("Could not read result.txt")
             .replace('\n', "");
 
         let output = part1(&input);
+
+        assert_eq!(result, output)
+    }
+
+    #[test]
+    fn part2_test() {
+        let input = fs::read_to_string("./test2.txt").expect("Could not read input2.txt");
+        let result = fs::read_to_string("./result2.txt")
+            .expect("Could not read result2.txt")
+            .replace('\n', "");
+
+        let output = part2(&input);
 
         assert_eq!(result, output)
     }
