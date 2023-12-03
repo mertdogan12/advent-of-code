@@ -13,13 +13,15 @@ fn part1(input: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
     use super::*;
+    use std::fs;
 
     #[test]
     fn part1_test() {
-        let input = fs::read_to_string("./test.txt").expect("Could not read input.txt");
-        let result = fs::read_to_string("./result.txt").expect("Could not read input.txt");
+        let input = fs::read_to_string("./test.txt").expect("Could not read test.txt");
+        let result = fs::read_to_string("./result.txt")
+            .expect("Could not read result.txt")
+            .replace('\n', "");
 
         let output = part1(&input);
 
