@@ -45,7 +45,6 @@ fn part1(input: &str) -> String {
 }
 
 fn part2(input: &str) -> String {
-    let mut out = 0;
     let mut cards = vec![1; input.lines().count()];
 
     for (i, l) in input.lines().enumerate() {
@@ -79,9 +78,7 @@ fn part2(input: &str) -> String {
         }
     }
 
-    cards.iter().for_each(|card| out += card);
-
-    return out.to_string();
+    return cards.iter().sum::<i32>().to_string();
 }
 
 #[cfg(test)]
