@@ -1,10 +1,10 @@
 all:
-	gcc main.c -o main
+	gcc main.c day.c -o main
 	./main
 
-test:
-	gcc test.c -o test
+test: 
+	gcc test.c day.c -o test
 	./test
 
 clean:
-	rm main test
+	rm -f main test
