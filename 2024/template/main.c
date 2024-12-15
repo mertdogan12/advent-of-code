@@ -8,7 +8,7 @@ int main() {
     if (file == NULL)
         exit(EXIT_FAILURE);
 
-    printf("Output: %d\n", part2(file));
+    printf("Output: %d\n", part(file));
 
     fclose(file);
     exit(EXIT_SUCCESS);

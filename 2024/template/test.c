@@ -9,7 +9,7 @@ int main() {
     if (file == NULL)
         exit(EXIT_FAILURE);
 
-    int result = part2(file);
+    int result = part(file);
 
     if (result == correctOutput) {
         printf("Correct result: %d\n", result);
