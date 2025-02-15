@@ -30,22 +30,25 @@ size_t hash_vec2(void* value)
     return (hash_x + 1) * (hash_y - 8);
 }
 
-int check(Set* set, int* array, size_t arrSize)
+int sort(Set* set, int* array, size_t arrSize)
 {
-    for (size_t i = 1; i < arrSize; i++)
+    int swap = 0;
+    for (size_t i = 0; i < arrSize - 1; i++)
     {
         vec2 val;
-        val.x = array[i];
-        val.y = array[0];
-        printf("%d|%d\n", val.x, val.y);
+        val.x = array[i + 1];
+        val.y = array[i];
 
         if (exists(set, (void*) &val))
         {
-            return 0;
+            swap = 1;
+            array[i] = array[i] ^ array[i + 1];
+            array[i + 1] = array[i] ^ array[i + 1];
+            array[i] = array[i] ^ array[i + 1];
         }
     }
     
-    return 1;
+    return swap;
 }
 
 int part(FILE* input) 
@@ -88,35 +91,24 @@ int part(FILE* input)
                 buffInx++;
             }
             
-            int correct = 1;
-            printf("Size: %d\n", buffInx);
+            int add = 0;
             for (size_t i = 0; i < buffInx - 1; i++)
             {
-                printf("First: %d\n", buffer[i]);
-                if (!check(set, &buffer[i], buffInx - i))
+                if (sort(set, &buffer[0], buffInx - i))
                 {
-                    correct = 0;
-                    printf("nope\n");
-                    break;
+                    add = 1;
                 } else
                 {
-                    printf("yes: \n");
+                    break;
                 }
             }
 
-            if (correct)
+            if (add)
             {
                 out += buffer[(buffInx / 2 + 1) - 1];
-                printf("value: %d\n", buffer[(buffInx / 2 + 1) - 1]);
             }
-            
-            printf("\n");
         }
     }
 
-    vec2 t;
-    t.x = 72;
-    t.y = 44;
-    printf("%d\n", exists(set, (void*) &t));
     return out;
 }
