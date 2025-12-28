@@ -1,16 +1,24 @@
-let valid x =
-  let s = string_of_int x in
-  let s_len = String.length s in
-  if s_len mod 2 = 0 then
-    (String.sub s 0 (s_len / 2)) = (String.sub s (s_len / 2) (s_len / 2))
+let rec valid_seq x seq =
+  let seq_l = String.length seq in
+  let x_l = String.length x in
+  if x = "" then
+    true
+  else if seq_l > x_l then
+    false
   else
-    false;;
+    String.sub x 0 seq_l = seq && valid_seq (String.sub x seq_l (x_l - seq_l)) seq;;
+
+let rec valid s i =
+  if i > String.length s / 2 then
+    false
+  else
+    valid_seq s (String.sub s 0 i) || valid s (i + 1);;
 
 let rec calc_sec lo hi =
   if lo > hi then
     0
   else
-    calc_sec (lo + 1) hi + if valid lo then lo else 0
+    calc_sec (lo + 1) hi + if valid (string_of_int lo) 1 then lo else 0
 
 let calc_sec sec =
   match String.split_on_char '-' sec with
