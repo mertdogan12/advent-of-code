@@ -54,10 +54,16 @@ let is_grabbeble set xy =
 ;;
 
 let rec solve list set out =
-  match list with
-  | x :: y ->
-    if is_grabbeble set x then solve y set (out + 1) else solve y set out
-  | [] -> out
+  let rec s list set out out_set =
+    match list with
+    | x :: y ->
+      if is_grabbeble set x then s y set (out + 1) (XYSet.remove x out_set) else s y set out out_set
+    | [] -> (out, out_set)
+  in let (o, out_set) = s list set out set in
+  if o > out then
+    solve (XYSet.to_list out_set) out_set o
+  else
+    out
 ;;
 
 let solve ic =
